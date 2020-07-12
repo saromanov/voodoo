@@ -1,0 +1,2 @@
+# voodoo
+Stream processing library
