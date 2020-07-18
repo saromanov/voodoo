@@ -14,7 +14,11 @@ type Redis struct {
 	out    chan interface{}
 }
 
+// New creates redis source
 func New(ctx context.Context, config *redis.Options) source.Source {
+	if config == nil {
+		config = &redis.Options{}
+	}
 	return &Redis{
 		ctx:    ctx,
 		client: redis.NewClient(config),
