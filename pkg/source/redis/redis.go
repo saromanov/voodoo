@@ -33,12 +33,16 @@ func New(ctx context.Context, config *Options) (source.Source, error) {
 	if config.ClientOptions == nil {
 		config.ClientOptions = &redis.Options{}
 	}
-	return &Redis{
+	client := redis.NewClient(config.ClientOptions)
+	pubsub := client.Subscribe(config.Channel)
+	r := &Redis{
 		ctx:    ctx,
 		config: config,
 		client: redis.NewClient(config.ClientOptions),
 		out:    make(chan interface{}),
-	}, nil
+	}
+	go r.init(pubsub.Channel())
+	return r, nil
 }
 
 // prepare converts input redis message to data interface
