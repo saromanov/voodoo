@@ -18,9 +18,25 @@ type Map struct {
 
 // New initialize method for map
 func New(f Func)transform.Transform {
-	return &Map {
+	r := &Map {
 		F:f,
 		in:in,
 		out: out, 
 	}
+	go r.apply()
+	return r
+}
+
+func (m *Map) With(t transform.Transform) transform.Transform {
+	return m
+}
+
+// apply provides doing of map data
+func (m *Map) apply() {
+	for elem := range m.in {
+		go func(e interface{}) {
+			m.out <- m.F(e)
+		}(elem)
+	}
+	close(m.out)
 }
