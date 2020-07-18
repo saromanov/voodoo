@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-redis/redis"
 	"github.com/saromanov/voodoo/pkg/source"
+	"github.com/saromanov/voodoo/pkg/transform"
 )
 
 type Redis struct {
@@ -21,6 +22,12 @@ func New(ctx context.Context, config *redis.Options) source.Source {
 	}
 }
 
+// prepare converts input redis message to data interface
+func (r *Redis) prepare(in interface{}) interface{} {
+	result := in.(*redis.Message)
+	return result.Payload
+}
+
 func (r *Redis) init(ch <-chan *redis.Message) {
 	for {
 		select {
@@ -35,8 +42,8 @@ func (r *Redis) init(ch <-chan *redis.Message) {
 	r.client.Close()
 }
 
-func (r *Redis) With() error {
-	return nil
+func (r *Redis) With(transform.Transform) source.Source {
+	return r
 }
 
 func (r *Redis) To() error {
