@@ -13,7 +13,10 @@ func mapTransform(data interface{}) interface{} {
 }
 
 func main() {
-	source := redis.New(context.TODO(), nil)
+	source, err := redis.New(context.TODO(), &redis.Options{Channel: "test"})
+	if err != nil {
+		panic(err)
+	}
 	trans := mapping.New(mapTransform)
 	source.With(trans)
 }
