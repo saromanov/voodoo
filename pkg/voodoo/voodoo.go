@@ -45,7 +45,8 @@ func (v *Voodoo) Do() {
 	s := v.sources[0]
 	go func() {
 		for elem := range s.Out() {
-			fmt.Println(elem)
+			v.transform.In(elem)
+			fmt.Println(<-v.transform.Out())
 		}
 		//close(inlet.In())
 	}()

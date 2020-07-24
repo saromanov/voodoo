@@ -24,12 +24,15 @@ func New(f Func) transform.Transform {
 	return r
 }
 
-func (m *Mapping) Do() error {
-	for elem := range m.Out() {
-		m.in <- elem
-	}
-	close(m.in)
-	return nil
+// In receive data for processing
+func (m *Mapping) In(elem interface{}) {
+	m.in <- elem
+	return
+}
+
+// Out returns processed data
+func (m *Mapping) Out() <-chan interface{} {
+	return m.out
 }
 
 // apply provides doing of map data

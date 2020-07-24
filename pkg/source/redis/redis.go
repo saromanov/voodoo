@@ -68,7 +68,7 @@ func (r *Redis) init(ch <-chan *redis.Message) {
 		case <-r.ctx.Done():
 			break
 		case msg := <-ch:
-			r.out <- msg
+			r.out <- r.prepare(msg)
 		}
 	}
 }
