@@ -45,13 +45,24 @@ func New(ctx context.Context, config *Options) (source.Source, error) {
 	return r, nil
 }
 
+// Out returns output channel
+func (r *Redis) Out() <-chan interface{} {
+	return r.out
+}
+
 // prepare converts input redis message to data interface
 func (r *Redis) prepare(in interface{}) interface{} {
 	result := in.(*redis.Message)
 	return result.Payload
 }
 
+// init provides initialization of the receiver from redis
 func (r *Redis) init(ch <-chan *redis.Message) {
+	defer func() {
+		close(r.out)
+		r.client.Close()
+	}()
+
 	for {
 		select {
 		case <-r.ctx.Done():
@@ -60,9 +71,6 @@ func (r *Redis) init(ch <-chan *redis.Message) {
 			r.out <- msg
 		}
 	}
-
-	close(r.out)
-	r.client.Close()
 }
 
 func (r *Redis) With(transform.Transform) source.Source {
