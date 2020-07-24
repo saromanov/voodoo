@@ -2,6 +2,7 @@ package voodoo
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/saromanov/voodoo/pkg/receiver"
@@ -50,4 +51,23 @@ func (v *Voodoo) Do() {
 	}()
 	fmt.Println("STARTED")
 	time.Sleep(50 * time.Second)
+}
+
+func mergeChannels(cs ...<-chan interface{}) <-chan interface{} {
+	out := make(chan interface{})
+	var wg sync.WaitGroup
+	wg.Add(len(cs))
+	for _, c := range cs {
+		go func(c <-chan interface{}) {
+			for v := range c {
+				out <- v
+			}
+			wg.Done()
+		}(c)
+	}
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
+	return out
 }
