@@ -3,6 +3,7 @@ package redis
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/go-redis/redis"
 	"github.com/saromanov/voodoo/pkg/source"
@@ -36,13 +37,31 @@ func New(ctx context.Context, config *Options) (source.Source, error) {
 	r := &Redis{
 		ctx:    ctx,
 		config: config,
-		client: redis.NewClient(config.ClientOptions),
-		out:    make(chan interface{}),
+		client: client,
+		in:     make(chan interface{}),
 	}
 	return r, nil
 }
 
-// Out returns output channel
-func (r *Redis) Out() <-chan interface{} {
-	return r.out
+// init provides initialization of the main loop
+func (r *Redis) init() {
+	defer r.client.Close()
+	for msg := range r.in {
+		switch m := msg.(type) {
+		case string:
+			err := r.client.Publish(r.config.Channel, m).Err()
+			if err != nil {
+				log.Printf("Publish failed with: %s", err)
+			}
+		default:
+			log.Printf("Unsupported redis message type %v", m)
+		}
+	}
+
+	log.Printf("Closing redis producer")
+}
+
+// In provides sending data to the channel
+func (r *Redis) In(data chan interface{}) {
+	r.in <- data
 }
