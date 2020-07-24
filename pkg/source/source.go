@@ -8,4 +8,5 @@ import (
 type Source interface {
 	With(transform.Transform) Source
 	To() error
+	Out() <-chan interface{}
 }
