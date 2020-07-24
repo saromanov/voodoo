@@ -2,6 +2,7 @@ package voodoo
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/saromanov/voodoo/pkg/receiver"
 	"github.com/saromanov/voodoo/pkg/source"
@@ -10,7 +11,8 @@ import (
 
 // Voodoo defines main app
 type Voodoo struct {
-	sources []source.Source
+	sources   []source.Source
+	transform transform.Transform
 }
 
 // New provides initialization of the app
@@ -28,6 +30,7 @@ func (v *Voodoo) AddSources(sources ...source.Source) *Voodoo {
 
 // Transform adds transformation to sources
 func (v *Voodoo) Transform(t transform.Transform) *Voodoo {
+	v.transform = t
 	return v
 }
 
@@ -45,4 +48,6 @@ func (v *Voodoo) Do() {
 		}
 		//close(inlet.In())
 	}()
+	fmt.Println("STARTED")
+	time.Sleep(50 * time.Second)
 }

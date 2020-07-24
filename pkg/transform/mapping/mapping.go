@@ -24,11 +24,11 @@ func New(f Func) transform.Transform {
 	return r
 }
 
-func (m *Mapping) With(t transform.Transform) transform.Transform {
-	return m
-}
-
 func (m *Mapping) Do() error {
+	for elem := range m.Out() {
+		m.in <- elem
+	}
+	close(m.in)
 	return nil
 }
 

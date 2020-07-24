@@ -20,6 +20,4 @@ func main() {
 		panic(err)
 	}
 	v.AddSources(source).Transform(mapping.New(mapTransform)).AddReceivers().Do()
-	trans := mapping.New(mapTransform)
-	source.With(trans)
 }
