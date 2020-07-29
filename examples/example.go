@@ -21,7 +21,9 @@ func main() {
 		panic(err)
 	}
 
-	receiver, err := rec.New(context.Background(), &rec.Options{})
+	receiver, err := rec.New(context.Background(), &rec.Options{
+		Channel: "sender",
+	})
 	if err != nil {
 		panic(err)
 	}

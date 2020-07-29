@@ -14,12 +14,14 @@ import (
 type Voodoo struct {
 	sources   []source.Source
 	transform transform.Transform
+	receivers []receiver.Receiver
 }
 
 // New provides initialization of the app
 func New() *Voodoo {
 	return &Voodoo{
-		sources: []source.Source{},
+		sources:   []source.Source{},
+		receivers: []receiver.Receiver{},
 	}
 }
 
@@ -37,6 +39,7 @@ func (v *Voodoo) Transform(t transform.Transform) *Voodoo {
 
 // AddReceivers provides adding of receivers
 func (v *Voodoo) AddReceivers(receivers ...receiver.Receiver) *Voodoo {
+	v.receivers = receivers
 	return v
 }
 
