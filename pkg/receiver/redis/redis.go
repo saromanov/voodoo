@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/go-redis/redis"
-	"github.com/saromanov/voodoo/pkg/source"
+	"github.com/saromanov/voodoo/pkg/receiver"
 )
 
 // Options defines initialization options for redis receiver
@@ -23,7 +23,7 @@ type Redis struct {
 }
 
 // New creates redis receiver
-func New(ctx context.Context, config *Options) (source.Source, error) {
+func New(ctx context.Context, config *Options) (receiver.Receiver, error) {
 	if config == nil {
 		return nil, fmt.Errorf("config is not defined")
 	}

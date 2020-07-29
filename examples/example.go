@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 
+	rec "github.com/saromanov/voodoo/pkg/receiver/redis"
 	"github.com/saromanov/voodoo/pkg/source/redis"
 	"github.com/saromanov/voodoo/pkg/transform/mapping"
 	"github.com/saromanov/voodoo/pkg/voodoo"
@@ -19,5 +20,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	v.AddSources(source).Transform(mapping.New(mapTransform)).AddReceivers().Do()
+
+	receiver, err := rec.New(context.Background(), &rec.Options{})
+	if err != nil {
+		panic(err)
+	}
+	v.AddSources(source).Transform(mapping.New(mapTransform)).AddReceivers(receiver).Do()
 }
