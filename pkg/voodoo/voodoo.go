@@ -49,7 +49,7 @@ func (v *Voodoo) Do() {
 	go func() {
 		for elem := range s.Out() {
 			v.transform.In(elem)
-			fmt.Println(<-v.transform.Out())
+			v.sendToReceivers(v.transform.Out())
 		}
 		//close(inlet.In())
 	}()
@@ -57,7 +57,7 @@ func (v *Voodoo) Do() {
 	time.Sleep(50 * time.Second)
 }
 
-func (v *Voodoo) sendToReceivers(data chan interface{}) {
+func (v *Voodoo) sendToReceivers(data <-chan interface{}) {
 	for _, r := range v.receivers {
 		r.In(data)
 	}

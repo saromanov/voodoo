@@ -16,7 +16,11 @@ type Channel struct {
 
 // New creates channel receiver
 func New(ctx context.Context) (receiver.Receiver, error) {
-	return &Channel{}, nil
+	c := &Channel{
+		in: make(chan interface{}),
+	}
+	go c.init()
+	return c, nil
 }
 
 // init provides initialization of the main loop
@@ -29,6 +33,6 @@ func (r *Channel) init() {
 }
 
 // In provides sending data to the channel
-func (r *Channel) In(data chan interface{}) {
+func (r *Channel) In(data <-chan interface{}) {
 	r.in <- data
 }
