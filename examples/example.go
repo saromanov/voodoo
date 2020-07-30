@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	rec "github.com/saromanov/voodoo/pkg/receiver/redis"
+	rec "github.com/saromanov/voodoo/pkg/receiver/channel"
 	"github.com/saromanov/voodoo/pkg/source/redis"
 	"github.com/saromanov/voodoo/pkg/transform/mapping"
 	"github.com/saromanov/voodoo/pkg/voodoo"
@@ -21,9 +21,7 @@ func main() {
 		panic(err)
 	}
 
-	receiver, err := rec.New(context.Background(), &rec.Options{
-		Channel: "sender",
-	})
+	receiver, err := rec.New(context.Background())
 	if err != nil {
 		panic(err)
 	}
