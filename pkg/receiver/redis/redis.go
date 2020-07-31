@@ -62,6 +62,6 @@ func (r *Redis) init() {
 }
 
 // In provides sending data to the channel
-func (r *Redis) In(data <-chan interface{}) {
+func (r *Redis) In(data interface{}) {
 	r.in <- data
 }

@@ -33,6 +33,6 @@ func (r *Channel) init() {
 }
 
 // In provides sending data to the channel
-func (r *Channel) In(data <-chan interface{}) {
+func (r *Channel) In(data interface{}) {
 	r.in <- data
 }

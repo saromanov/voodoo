@@ -49,7 +49,10 @@ func (v *Voodoo) Do() {
 	go func() {
 		for elem := range s.Out() {
 			v.transform.In(elem)
-			v.sendToReceivers(v.transform.Out())
+			for _, r := range v.receivers {
+				value := <-v.transform.Out()
+				r.In(value)
+			}
 		}
 		//close(inlet.In())
 	}()
