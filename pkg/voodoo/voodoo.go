@@ -27,7 +27,7 @@ func New() *Voodoo {
 
 // AddSources provides adding of sources
 func (v *Voodoo) AddSources(sources ...source.Source) *Voodoo {
-	v.sources = sources
+	v.sources = append(v.sources, sources...)
 	return v
 }
 
@@ -39,7 +39,7 @@ func (v *Voodoo) Transform(t transform.Transform) *Voodoo {
 
 // AddReceivers provides adding of receivers
 func (v *Voodoo) AddReceivers(receivers ...receiver.Receiver) *Voodoo {
-	v.receivers = receivers
+	v.receivers = append(v.receivers, receivers...)
 	return v
 }
 
@@ -71,12 +71,12 @@ func mergeChannels(cs ...source.Source) <-chan interface{} {
 	var wg sync.WaitGroup
 	wg.Add(len(cs))
 	for _, c := range cs {
-		go func(c <-chan interface{}) {
-			for v := range c {
+		go func(s source.Source) {
+			for v := range s.Out() {
 				out <- v
 			}
 			wg.Done()
-		}(c.Out())
+		}(c)
 	}
 	go func() {
 		wg.Wait()
