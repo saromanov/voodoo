@@ -17,6 +17,13 @@ func main() {
 				log.Printf("redis failed with: %s", err)
 			}
 		}(i)
+
+		go func(d int) {
+			err := client.Publish("test2", fmt.Sprintf("%ddataNIL", d)).Err()
+			if err != nil {
+				log.Printf("redis failed with: %s", err)
+			}
+		}(i)
 	}
 	time.Sleep(3 * time.Second)
 }

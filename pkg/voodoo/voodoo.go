@@ -45,13 +45,11 @@ func (v *Voodoo) AddReceivers(receivers ...receiver.Receiver) *Voodoo {
 
 // Do provides running of the flow
 func (v *Voodoo) Do() {
-	s := v.sources[0]
 	go func() {
-		for elem := range s.Out() {
+		for elem := range getData(v.sources...) {
 			v.transform.In(elem)
 			for _, r := range v.receivers {
-				value := <-v.transform.Out()
-				r.In(value)
+				r.In(<-v.transform.Out())
 			}
 		}
 		//close(inlet.In())
@@ -60,13 +58,15 @@ func (v *Voodoo) Do() {
 	time.Sleep(50 * time.Second)
 }
 
-func (v *Voodoo) sendToReceivers(data <-chan interface{}) {
-	for _, r := range v.receivers {
-		r.In(data)
+func getData(cs ...source.Source) <-chan interface{} {
+	if len(cs) == 1 {
+		return cs[0].Out()
 	}
+	return mergeChannels(cs...)
 }
 
-func mergeChannels(cs ...<-chan interface{}) <-chan interface{} {
+// mergeChannels provides merging of several channels at one
+func mergeChannels(cs ...source.Source) <-chan interface{} {
 	out := make(chan interface{})
 	var wg sync.WaitGroup
 	wg.Add(len(cs))
@@ -76,7 +76,7 @@ func mergeChannels(cs ...<-chan interface{}) <-chan interface{} {
 				out <- v
 			}
 			wg.Done()
-		}(c)
+		}(c.Out())
 	}
 	go func() {
 		wg.Wait()
