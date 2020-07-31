@@ -2,7 +2,6 @@ package channel
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/saromanov/voodoo/pkg/receiver"
@@ -12,12 +11,14 @@ import (
 type Channel struct {
 	ctx context.Context
 	in  chan interface{}
+	f   func(interface{})
 }
 
 // New creates channel receiver
-func New(ctx context.Context) (receiver.Receiver, error) {
+func New(ctx context.Context, f func(interface{})) (receiver.Receiver, error) {
 	c := &Channel{
 		in: make(chan interface{}),
+		f:  f,
 	}
 	go c.init()
 	return c, nil
@@ -26,7 +27,7 @@ func New(ctx context.Context) (receiver.Receiver, error) {
 // init provides initialization of the main loop
 func (r *Channel) init() {
 	for msg := range r.in {
-		fmt.Println(msg)
+		r.f(msg)
 	}
 
 	log.Printf("Closing channel receiver")

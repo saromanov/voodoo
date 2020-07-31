@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	rec "github.com/saromanov/voodoo/pkg/receiver/channel"
@@ -14,6 +15,10 @@ func mapTransform(data interface{}) interface{} {
 	return strings.ToUpper(data.(string))
 }
 
+func receiver(data interface{}) {
+	fmt.Println(data)
+}
+
 func main() {
 	v := voodoo.New()
 	source, err := redis.New(context.TODO(), &redis.Options{Channel: "test"})
@@ -21,7 +26,7 @@ func main() {
 		panic(err)
 	}
 
-	receiver, err := rec.New(context.Background())
+	receiver, err := rec.New(context.Background(), receiver)
 	if err != nil {
 		panic(err)
 	}
