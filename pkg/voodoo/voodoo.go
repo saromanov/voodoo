@@ -1,9 +1,7 @@
 package voodoo
 
 import (
-	"fmt"
 	"sync"
-	"time"
 
 	"github.com/saromanov/voodoo/pkg/receiver"
 	"github.com/saromanov/voodoo/pkg/source"
@@ -54,8 +52,6 @@ func (v *Voodoo) Do() {
 		}
 		//close(inlet.In())
 	}()
-	fmt.Println("STARTED")
-	time.Sleep(50 * time.Second)
 }
 
 func getData(cs ...source.Source) <-chan interface{} {

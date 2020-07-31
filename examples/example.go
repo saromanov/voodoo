@@ -39,4 +39,5 @@ func main() {
 		AddSources(source2).
 		Transform(mapping.New(mapTransform)).
 		AddReceivers(receiver).Do()
+	select {}
 }
