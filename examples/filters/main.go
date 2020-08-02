@@ -14,7 +14,6 @@ import (
 
 func filterTransform(data interface{}) bool {
 	r := data.(string)
-	fmt.Println(r)
 	return len(r) > 5
 }
 
@@ -29,7 +28,7 @@ func sourceChannel() <-chan interface{} {
 	return result
 }
 func reca(data interface{}) {
-	fmt.Println(data)
+	fmt.Println("RECEIVE: ", data)
 }
 
 func main() {

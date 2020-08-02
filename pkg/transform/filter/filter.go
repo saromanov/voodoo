@@ -42,6 +42,8 @@ func (m *Filter) apply() {
 			res := m.F(e)
 			if res {
 				m.out <- res
+			} else {
+				m.out <- struct{}{}
 			}
 		}(elem)
 	}
