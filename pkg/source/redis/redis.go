@@ -6,7 +6,6 @@ import (
 
 	"github.com/go-redis/redis"
 	"github.com/saromanov/voodoo/pkg/source"
-	"github.com/saromanov/voodoo/pkg/transform"
 )
 
 // Options defines initialization options for redis source
@@ -71,12 +70,4 @@ func (r *Redis) init(ch <-chan *redis.Message) {
 			r.out <- r.prepare(msg)
 		}
 	}
-}
-
-func (r *Redis) With(transform.Transform) source.Source {
-	return r
-}
-
-func (r *Redis) To() error {
-	return nil
 }
