@@ -57,6 +57,7 @@ func (r *Redis) init() {
 			log.Printf("Unsupported redis message type %v", m)
 		}
 	}
+	close(r.in)
 
 	log.Printf("Closing redis producer")
 }

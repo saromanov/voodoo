@@ -2,7 +2,6 @@ package channel
 
 import (
 	"context"
-	"log"
 
 	"github.com/saromanov/voodoo/pkg/receiver"
 )
@@ -30,7 +29,7 @@ func (r *Channel) init() {
 		r.f(msg)
 	}
 
-	log.Printf("Closing channel receiver")
+	close(r.in)
 }
 
 // In provides sending data to the channel
