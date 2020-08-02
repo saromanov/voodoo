@@ -25,6 +25,9 @@ func New(ctx context.Context, config *Options) (source.Source, error) {
 		return nil, fmt.Errorf("config is not defined")
 	}
 	ch := &Channel{
+		ctx:    ctx,
+		config: config,
+		out:    make(chan interface{}),
 		method: config.Method,
 	}
 	go ch.init()
@@ -47,7 +50,6 @@ func (r *Channel) init() {
 		case <-r.ctx.Done():
 			break
 		case msg := <-r.method():
-			fmt.Println(msg)
 			r.out <- msg
 		}
 	}
