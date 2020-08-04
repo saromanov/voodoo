@@ -13,7 +13,7 @@ type Filter struct {
 	out chan interface{}
 }
 
-// New initialize method for map
+// New initialize method for filter
 func New(f Func) transform.Transform {
 	r := &Filter{
 		F:   f,

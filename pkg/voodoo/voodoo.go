@@ -47,10 +47,12 @@ func (v *Voodoo) Do() {
 		for elem := range getData(v.sources...) {
 			v.transform.In(elem)
 			for _, r := range v.receivers {
-				r.In(<-v.transform.Out())
+				res := <-v.transform.Out()
+				if res != struct{}{} {
+					r.In(res)
+				}
 			}
 		}
-		//close(inlet.In())
 	}()
 }
 
@@ -61,7 +63,7 @@ func getData(cs ...source.Source) <-chan interface{} {
 	return mergeChannels(cs...)
 }
 
-// mergeChannels provides merging of several channels at one
+// mergeChannels provides merging of several channels at once
 func mergeChannels(cs ...source.Source) <-chan interface{} {
 	out := make(chan interface{})
 	var wg sync.WaitGroup
