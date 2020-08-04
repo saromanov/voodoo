@@ -41,7 +41,7 @@ func (m *Filter) apply() {
 		go func(e interface{}) {
 			res := m.F(e)
 			if res {
-				m.out <- res
+				m.out <- e
 			} else {
 				m.out <- struct{}{}
 			}
