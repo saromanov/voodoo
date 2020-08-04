@@ -16,8 +16,9 @@ type Channel struct {
 // New creates channel receiver
 func New(ctx context.Context, f func(interface{})) (receiver.Receiver, error) {
 	c := &Channel{
-		in: make(chan interface{}),
-		f:  f,
+		ctx: ctx,
+		in:  make(chan interface{}),
+		f:   f,
 	}
 	go c.init()
 	return c, nil

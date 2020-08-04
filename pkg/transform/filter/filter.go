@@ -27,7 +27,6 @@ func New(f Func) transform.Transform {
 // In receive data for processing
 func (m *Filter) In(elem interface{}) {
 	m.in <- elem
-	return
 }
 
 // Out returns processed data

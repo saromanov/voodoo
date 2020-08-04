@@ -40,6 +40,7 @@ func New(ctx context.Context, config *Options) (receiver.Receiver, error) {
 		client: client,
 		in:     make(chan interface{}),
 	}
+	go r.init()
 	return r, nil
 }
 
