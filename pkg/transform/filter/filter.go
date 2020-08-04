@@ -7,6 +7,7 @@ import (
 // Func defines function for transformation
 type Func func(interface{}) bool
 
+// Filter transform allows filtering of input data
 type Filter struct {
 	F   Func
 	in  chan interface{}

@@ -15,6 +15,7 @@ type Options struct {
 	Channel       string
 }
 
+// Redis defines redis receiver channel
 type Redis struct {
 	ctx    context.Context
 	client *redis.Client

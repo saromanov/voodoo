@@ -7,6 +7,7 @@ import (
 // Func defines function for transformation
 type Func func(interface{}) interface{}
 
+// Mapping allows transform data like F(x)->y
 type Mapping struct {
 	F   Func
 	in  chan interface{}

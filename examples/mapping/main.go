@@ -47,6 +47,9 @@ func main() {
 		Method: sourceChannel,
 	})
 
+	if err != nil {
+		panic(err)
+	}
 	receiver, err := rec.New(context.Background(), reca)
 	if err != nil {
 		panic(err)

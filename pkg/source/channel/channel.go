@@ -12,6 +12,7 @@ type Options struct {
 	Method func() <-chan interface{}
 }
 
+// Channel defines source
 type Channel struct {
 	ctx    context.Context
 	config *Options
