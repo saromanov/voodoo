@@ -14,7 +14,7 @@ import (
 
 func filterTransform(data interface{}) bool {
 	r := data.(string)
-	return len(r) > 5
+	return len(r) > 8
 }
 
 func sourceChannel() <-chan interface{} {
