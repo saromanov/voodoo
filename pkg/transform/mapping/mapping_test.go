@@ -12,7 +12,7 @@ import (
 func mapping(d interface{}) interface{} {
 	return strings.ToUpper(d.(string))
 }
-func TestChannel(t *testing.T) {
+func TestMapping(t *testing.T) {
 
 	ctx, cancel := context.WithTimeout(context.TODO(), 2*time.Second)
 	defer cancel()
