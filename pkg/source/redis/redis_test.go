@@ -43,3 +43,12 @@ func TestChannel(t *testing.T) {
 		assert.Fail(t, "deadline exceed")
 	}
 }
+
+func TestChannelWithErrors(t *testing.T) {
+	_, err := New(context.Background(), nil)
+	assert.Error(t, err)
+
+	_, err = New(context.Background(), &Options{})
+	assert.Error(t, err)
+
+}
