@@ -1,11 +1,17 @@
 package voodoo
 
 import (
+	"errors"
+	"fmt"
 	"sync"
 
 	"github.com/saromanov/voodoo/pkg/receiver"
 	"github.com/saromanov/voodoo/pkg/source"
 	"github.com/saromanov/voodoo/pkg/transform"
+)
+
+var (
+	errNoSources = errors.New("sources is not defined")
 )
 
 // Voodoo defines main app
@@ -42,7 +48,10 @@ func (v *Voodoo) AddReceivers(receivers ...receiver.Receiver) *Voodoo {
 }
 
 // Do provides running of the flow
-func (v *Voodoo) Do() {
+func (v *Voodoo) Do() error {
+	if err := v.validate(); err != nil {
+		return fmt.Errorf("unable to validate flow: %v", err)
+	}
 	go func() {
 		for elem := range getData(v.sources...) {
 			v.transform.In(elem)
@@ -54,6 +63,15 @@ func (v *Voodoo) Do() {
 			}
 		}
 	}()
+
+	return nil
+}
+
+func (v *Voodoo) validate() error {
+	if len(v.sources) == 0 {
+		return errNoSources
+	}
+	return nil
 }
 
 func getData(cs ...source.Source) <-chan interface{} {
