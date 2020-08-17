@@ -11,7 +11,8 @@ import (
 )
 
 var (
-	errNoSources = errors.New("sources is not defined")
+	errNoSources   = errors.New("sources is not defined")
+	errNoReceivers = errors.New("receivers is not defined")
 )
 
 // Voodoo defines main app
@@ -70,6 +71,9 @@ func (v *Voodoo) Do() error {
 func (v *Voodoo) validate() error {
 	if len(v.sources) == 0 {
 		return errNoSources
+	}
+	if len(v.receivers) == 0 {
+		return errNoReceivers
 	}
 	return nil
 }
